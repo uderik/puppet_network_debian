@@ -13,6 +13,16 @@ class network_debian {
       ensure => installed,
   }
 
+  # check dir
+  $iface_conf_dir='/etc/network/interfaces.d'
+
+  file {"$iface_conf_dir":
+      ensure => "directory",
+      owner  => root,
+      group  => root,
+      mode   => 755,
+  }
+
   exec { 'network-debian':
       command     => 'echo "postfix packages are installed"',
       path        => '/usr/sbin:/bin:/usr/bin:/sbin',
@@ -41,17 +51,6 @@ define iface_params ($hash){
   $iface_dns          = $hash[$name]['dns-nameservers']
   $iface_dns_search   = $hash[$name]['dns-search']
   $iface_name         = $name
-
-
-  # check dir
-  $iface_conf_dir='/etc/network/interfaces.d'
-
-  file {"$iface_conf_dir":
-      ensure => "directory",
-      owner  => root,
-      group  => root,
-      mode   => 755,
-  }
 
   file {"$iface_conf_dir/$iface_name":
       ensure  => "present",
