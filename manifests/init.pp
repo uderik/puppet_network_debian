@@ -58,7 +58,7 @@ define iface_params ($hash){
       owner   => root,
       group   => root,
       mode    => 755,
-      content => template('network_debian/templates/iface.rb'),
+      content => template('network_debian/iface.rb'),
   }
 }
 
