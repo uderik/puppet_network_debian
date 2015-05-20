@@ -9,7 +9,11 @@ class network_debian {
       ensure  => installed,
       before  => Exec['lxc-debian'],
   }
+
   package { 'isc-dhcp-client':
+      ensure => installed,
+  }
+  package { 'bridge-utils':
       ensure => installed,
   }
 
