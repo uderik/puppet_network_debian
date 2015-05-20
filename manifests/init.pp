@@ -1,4 +1,4 @@
-class network-debian {
+class network_debian {
   if ( $facts['lsbmajdistrelease'] == 8 ) {
     #notice("Welcome to LXC Debian 8.0 installer")
   } else {
@@ -22,13 +22,13 @@ class network-debian {
 
   $_hash=hiera_hash('network-interfaces', undef)
   $iface = keys($_hash)
-  iface-params {
+  iface_params {
   $iface:
     hash =>  $_hash;
   }
 }
 
-define iface-params ($hash){
+define iface_params ($hash){
   $iface_type         = $hash[$name]['type']
   $iface_method       = $hash[$name]['method']
   $iface_hwaddr       = $hash[$name]['hwaddr']

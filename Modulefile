@@ -1,4 +1,4 @@
-name    'network-debian'
+name    'network_debian'
 version '0.0.1'
 source 'UNKNOWN'
 author 'uderik'
