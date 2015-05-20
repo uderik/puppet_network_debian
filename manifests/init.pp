@@ -51,6 +51,7 @@ define iface_params ($hash){
   $iface_dns          = $hash[$name]['dns-nameservers']
   $iface_dns_search   = $hash[$name]['dns-search']
   $iface_name         = $name
+  $iface_conf_dir     = '/etc/network/interfaces.d'
 
   file {"$iface_conf_dir/$iface_name":
       ensure  => "present",
