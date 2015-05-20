@@ -1,4 +1,4 @@
-name    'uderik/network-debian'
+name    'network-debian'
 version '0.0.1'
 source 'UNKNOWN'
 author 'uderik'
