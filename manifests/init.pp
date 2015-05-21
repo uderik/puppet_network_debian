@@ -67,8 +67,9 @@ define iface_params ($hash){
   # interface up
   exec { "$iface_name-down":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
-    command     => "ifconfig $iface_name && ifdown $iface_name",
+    command     => "if [ `ifconfig $iface_name` ]; then ifdown $iface_name; else echo no interface; fi",
     subscribe   => File["$iface_conf_dir/$iface_name"],
+    returns     => 0,
     refreshonly => true
   }
   exec { "$iface_name-up":
