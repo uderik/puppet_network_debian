@@ -33,7 +33,7 @@ class network_debian {
       logoutput   => true,
       refreshonly => true,
   }
-
+  $interfaces = $facts['interfaces']
   $_hash=hiera_hash('network-interfaces', undef)
   $iface = keys($_hash)
   iface_params {
@@ -65,12 +65,7 @@ define iface_params ($hash){
       content => template('network_debian/iface.rb'),
   }
   # interface up
-  $interfaces = undef
-  $interfaces = $facts['interfaces']
-  notify { "interfaces: $interfaces":;}
-
-  if $facts['interfaces'] =~ /$iface_name/ {
-    notify { "interface: $iface_name present":; }
-  }
+  exec { "$iface_name\_up":
+    command {
 }
 
