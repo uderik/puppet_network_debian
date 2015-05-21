@@ -17,6 +17,12 @@ class network_debian {
       ensure => installed,
   }
 
+  service { 'networking':
+      ensure  => 'running',
+      enable  => 'true',
+      require => Package["ifupdown"],
+  }
+
   # check dir
   $iface_conf_dir='/etc/network/interfaces.d'
 
@@ -42,6 +48,7 @@ class network_debian {
       group   => root,
       mode    => 644,
       content => template('network_debian/interfaces.rb'),
+      notify  => Service['networking'],
   }
 
   $interfaces = $facts['interfaces']
@@ -74,29 +81,11 @@ define iface_params ($hash){
       group   => root,
       mode    => 644,
       content => template('network_debian/iface.rb'),
+      notify  => Service['networking'],
+
   }
   # interface up
-  if $iface_name =~ /br/ {
-    $ifdown_command="ifconfig $iface_name down && brctl delbr $iface_name"
-  } else {
-    $ifdown_command="ifdown $iface_name"
-  }
 
-  exec { "$iface_name-down":
-    path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
-    command     => "$ifdown_command",
-    subscribe   => File["$iface_conf_dir/$iface_name"],
-    onlyif      => "ifconfig $iface_name",
-    logoutput   => true,
-    refreshonly => true
-  }
-  exec { "$iface_name-up":
-    path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
-    command     => "echo ifup $iface_name",
-    subscribe   => Exec["$iface_name-down"],
-    logoutput   => true,
-    refreshonly => true
-  }
 
 }
 
