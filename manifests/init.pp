@@ -76,16 +76,21 @@ define iface_params ($hash){
   $iface_conf_dir     = '/etc/network/interfaces.d'
 
   file {"$iface_conf_dir/$iface_name":
-      ensure  => "present",
-      owner   => root,
-      group   => root,
-      mode    => 644,
-      content => template('network_debian/iface.rb'),
-      notify  => Service['networking'],
-
+      ensure    => "present",
+      owner     => root,
+      group     => root,
+      mode      => 644,
+      content   => template('network_debian/iface.rb'),
   }
-  # interface up
 
-
+  exec { "$iface_name-clear":
+    path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
+    command     => "ip addr flush dev $iface_name",
+    subscribe   => File["$ifddace_conf_dir/$iface_name"],
+    onlyif      => "ifconfig $iface_name",
+    notify      => Service['networking'],
+    logoutput   => true,
+    refreshonly => true
+  }
 }
 
