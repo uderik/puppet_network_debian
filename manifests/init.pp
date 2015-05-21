@@ -65,6 +65,8 @@ define iface_params ($hash){
       content => template('network_debian/iface.rb'),
   }
   # interface up
+  notify { "interfaces: $facts['interfaces']:;}
+
   if $facts['interfaces'] =~ /$iface_name/ {
     notify { "interface: $iface_name present":; }
   }
