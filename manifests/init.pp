@@ -84,7 +84,7 @@ define iface_params ($hash){
 
   exec { "$iface_name-down":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
-    command     => "echo ifdown $iface_name",
+    command     => "$ifdown_command",
     subscribe   => File["$iface_conf_dir/$iface_name"],
     onlyif      => "ifconfig $iface_name",
     logoutput   => true,
