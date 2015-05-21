@@ -65,13 +65,13 @@ define iface_params ($hash){
       content => template('network_debian/iface.rb'),
   }
   # interface up
-  exec { "$iface_name\_down":
+  exec { "$iface_name-down":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
     command     => "ifconfig $iface_name && ifdown $iface_name",
     subscribe   => File["$iface_conf_dir/$iface_name"],
     refreshonly => true
   }
-  exec { "$iface_name\_up":
+  exec { "$iface_name-up":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
     command     => "ifup $iface_name",
     subscribe   => Exec["$iface_name\_down"],
