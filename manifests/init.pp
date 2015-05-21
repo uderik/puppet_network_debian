@@ -86,7 +86,7 @@ define iface_params ($hash){
   exec { "$iface_name-clear":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
     command     => "ip addr flush dev $iface_name",
-    subscribe   => File["$ifddace_conf_dir/$iface_name"],
+    subscribe   => File["$iface_conf_dir/$iface_name"],
     onlyif      => "ifconfig $iface_name",
     notify      => Service['networking'],
     logoutput   => true,
