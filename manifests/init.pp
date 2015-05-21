@@ -74,7 +74,7 @@ define iface_params ($hash){
   exec { "$iface_name-up":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
     command     => "ifup $iface_name",
-    subscribe   => Exec["$iface_name\_down"],
+    subscribe   => Exec["$iface_name-down"],
     refreshonly => true
   }
 
