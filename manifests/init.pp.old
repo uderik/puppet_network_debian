@@ -33,17 +33,6 @@ class network_debian {
       logoutput   => true,
       refreshonly => true,
   }
-
-
-
-  file {"/etc/network/interfaces":
-      ensure  => "present",
-      owner   => root,
-      group   => root,
-      mode    => 644,
-      content => template('network_debian/interfaces.rb'),
-  }
-
   $interfaces = $facts['interfaces']
   $_hash=hiera_hash('network-interfaces', undef)
   $iface = keys($_hash)
@@ -76,25 +65,16 @@ define iface_params ($hash){
       content => template('network_debian/iface.rb'),
   }
   # interface up
-  if $iface_name =~ /br/ {
-    $ifdown_command="ifconfig $iface_name down && brctl delbr $iface_name"
-  } else {
-    $ifdown_command="ifdown $iface_name"
-  }
-
   exec { "$iface_name-down":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
-    command     => "echo ifdown $iface_name",
+    command     => "ifconfig $iface_name && ifdown $iface_name",
     subscribe   => File["$iface_conf_dir/$iface_name"],
-    onlyif      => "ifconfig $iface_name",
-    logoutput   => true,
     refreshonly => true
   }
   exec { "$iface_name-up":
     path        => ["/usr/bin", "/sbin","/bin","/usr/sbin"],
-    command     => "echo ifup $iface_name",
+    command     => "ifup $iface_name",
     subscribe   => Exec["$iface_name-down"],
-    logoutput   => true,
     refreshonly => true
   }
 
